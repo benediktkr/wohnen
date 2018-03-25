@@ -27,7 +27,6 @@ for site in args.sites:
     if args.scrape:
         scraper = getattr(sitem, "scraper")
         html = scraper.scrape()
-        print html
     else:
         with open('{}/sample.txt'.format(site), 'r') as f:
             html = f.read()
