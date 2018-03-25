@@ -29,7 +29,7 @@ for site in args.sites:
         html = scraper.scrape()
         print html
     else:
-        with open('samples/{}.txt'.format(site), 'r') as f:
+        with open('{}/sample.txt'.format(site), 'r') as f:
             html = f.read()
 
     parser = getattr(sitem, "parser")
