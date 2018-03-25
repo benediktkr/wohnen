@@ -11,15 +11,14 @@ parser.add_argument("--scrape", action="store_true", help="actually scrape")
 
 args = parser.parse_args()
 
-root = logging.getLogger()
-root.setLevel(logging.DEBUG)
+logger = logging.getLogger()
+logger.setLevel(logging.DEBUG)
 
 ch = logging.StreamHandler(sys.stdout)
 ch.setLevel(logging.DEBUG)
-formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(name)s - %(message)s')
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(name)s - %(message)s', "%Y-%m-%d %H:%M:%S")
 ch.setFormatter(formatter)
-root.addHandler(ch)
-logger = logging.getLogger()
+logger.addHandler(ch)
 
 for site in args.sites:
     logger.debug(site)
@@ -32,4 +31,4 @@ for site in args.sites:
             html = f.read()
 
     parser = getattr(sitem, "parser")
-    print parser.parse()
+    parser.parse()
