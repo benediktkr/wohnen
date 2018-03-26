@@ -44,18 +44,12 @@ if __name__ == "__main__":
         flats = parser.parse(html)
 
         jsonfile = JsonFile.open(config.jsonfile)
-        # newflats = []
-        # for flat in flats:
-        #     new = jsonfile.add_item(flat)
-        #     if new:
-        #         newflats.append(flat)
-
         jsonfile.add_list(flats)
+
         newflats = jsonfile.new_items[:]
 
         if jsonfile.new_item_count > 0:
             logging.info("Found {} new flats".format(jsonfile.new_item_count))
-
 
         jsonfile.save()
 
