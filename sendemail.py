@@ -2,8 +2,11 @@
 
 import smtplib
 from email.mime.text import MIMEText
+import logging
 
 import config
+
+logger = logging.getLogger(__name__)
 
 message_greetings = u"""
 I found {} new flats!
@@ -41,7 +44,12 @@ def create_email(flats):
     msg["To"] = config.email_to
 
 def send_email(flats):
+    logger.info("Sending emails to {}".format(", ".join(config.email_to)))
     msg = create_email(flats)
-    s = smtplib.SMTP(config.smtp_server)
-    s.sendmail(config.email_from, config.email_to, msg.as_string())
-    s.quit()
+    try:
+        s = smtplib.SMTP(config.smtp_server)
+        s.sendmail(config.email_from, config.email_to, msg.as_string())
+        s.quit()
+    except Exception as e:
+        logger.error(e)
+        raise
