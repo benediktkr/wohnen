@@ -60,4 +60,4 @@ if __name__ == "__main__":
         jsonfile.save()
 
         if args.email:
-            sendemail.send_email(flats)
+            sendemail.send_email(newflats)
