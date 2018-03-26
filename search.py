@@ -5,11 +5,13 @@ import logging
 import inberlinwohnen.parser
 import inberlinwohnen.scraper
 from jsonfile import JsonFile
+import sendemail
 import config
 
 parser = argparse.ArgumentParser()
 parser.add_argument("sites", type=str, nargs='+', help="list of sites to check")
 parser.add_argument("--scrape", action="store_true", help="actually scrape")
+parser.add_argument("--email", action="store_true", help="send email notification")
 
 args = parser.parse_args()
 
@@ -42,14 +44,20 @@ if __name__ == "__main__":
         flats = parser.parse(html)
 
         jsonfile = JsonFile.open(config.jsonfile)
-        newflats = []
-        for flat in flats:
-            new = jsonfile.add_item(flat)
-            if new:
-                newflats.append(flat)
+        # newflats = []
+        # for flat in flats:
+        #     new = jsonfile.add_item(flat)
+        #     if new:
+        #         newflats.append(flat)
+
+        jsonfile.add_list(flats)
+        newflats = jsonfile.new_items[:]
 
         if jsonfile.new_item_count > 0:
             logging.info("Found {} new flats".format(jsonfile.new_item_count))
 
 
         jsonfile.save()
+
+        if args.email:
+            sendemail.send_email(flats)
