@@ -59,5 +59,5 @@ if __name__ == "__main__":
 
         jsonfile.save()
 
-        if args.email:
+        if args.email and len(newflats) > 0:
             sendemail.send_email(newflats)
