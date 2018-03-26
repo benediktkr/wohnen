@@ -37,15 +37,16 @@ def create_email_body(flats):
 
 
 def create_email(flats):
-    msg = MIMEText(create_email_body(flats))
+    msg = MIMEText(create_email_body(flats), _charset="utf-8")
     msg['Subject'] = "Found {} new flats".format(len(flats))
     msg["From"] = config.email_from
-    msg["To"] = config.email_to
+    msg["To"] = ", ".join(config.email_to)
     return msg
 
 def send_email(flats):
     logger.info("Sending emails to {}".format(", ".join(config.email_to)))
     msg = create_email(flats)
+
     try:
         s = smtplib.SMTP(config.smtp_server)
         s.sendmail(config.email_from, config.email_to, msg.as_string())
