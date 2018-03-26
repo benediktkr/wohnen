@@ -40,17 +40,27 @@ class JsonFile(object):
             self._json.append(item)
             self._existing_ids.add(item[self._cmp_key])
             self._new_ids.append(item[self._cmp_key])
+            return True
+        else:
+            return False
 
     def add_list(self, newlist):
         for item in newlist:
             self.add_item(item)
 
+    @property
+    def new_item_count(self):
+        return len(self._new_ids)
+
     def save(self):
+        """Simply overwrites the file with self._json"""
         if len(self._new_ids) > 0:
             try:
                 with open(self._filename, 'w') as f:
                     f.write(json.dumps(self._json, indent=4, separators=(',', ': ')))
+                    # empty the _new_ids list
                     logger.info("Wrote {} new items to {}".format(len(self._new_ids), self._filename))
+                    self._new_ids[:] = []
             except IOError as e:
                 logger.error(e)
         else:

@@ -14,7 +14,7 @@ parser.add_argument("--scrape", action="store_true", help="actually scrape")
 args = parser.parse_args()
 
 logger = logging.getLogger()
-logger.setLevel(logging.DEBUG)
+logger.setLevel(config.loglevel)
 
 ch = logging.StreamHandler(sys.stdout)
 ch.setLevel(logging.DEBUG)
@@ -42,5 +42,14 @@ if __name__ == "__main__":
         flats = parser.parse(html)
 
         jsonfile = JsonFile.open(config.jsonfile)
-        jsonfile.add_list(flats)
+        newflats = []
+        for flat in flats:
+            new = jsonfile.add_item(flat)
+            if new:
+                newflats.append(flat)
+
+        if jsonfile.new_item_count > 0:
+            logging.info("Found {} new flats".format(jsonfile.new_item_count))
+
+
         jsonfile.save()
