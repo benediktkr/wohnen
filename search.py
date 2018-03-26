@@ -4,6 +4,8 @@ import logging
 
 import inberlinwohnen.parser
 import inberlinwohnen.scraper
+from jsonfile import JsonFile
+import config
 
 parser = argparse.ArgumentParser()
 parser.add_argument("sites", type=str, nargs='+', help="list of sites to check")
@@ -37,10 +39,8 @@ if __name__ == "__main__":
             html = get_sample(site)
 
         parser = getattr(sitem, "parser")
-
-
         flats = parser.parse(html)
-        for f in flats:
-            if f['addr'].startswith("Hasen"):
-                import pprint
-                pprint.pprint(f)
+
+        jsonfile = JsonFile.open(config.jsonfile)
+        jsonfile.add_list(flats)
+        jsonfile.save()
