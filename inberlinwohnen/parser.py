@@ -14,7 +14,7 @@ def parse(html_input):
     tree = html.fromstring(html_input)
     all_flats = tree.xpath("//div[contains(@id,'cflat_')]")
 
-    logger.debug("{} flats found".format(len(all_flats)))
+    logger.info("Will parse {} flats".format(len(all_flats)))
 
     for flat in all_flats:
         # Parse HTML
