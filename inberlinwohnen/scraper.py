@@ -1,6 +1,8 @@
 import requests
 import time
+import logging
 
+logger = logging.getLogger(__name__)
 
 s = requests.Session()
 
@@ -72,8 +74,9 @@ search_data = {
 }
 
 def scrape():
-    balcony_search = s.post(search_url, data=search_data, headers=search_headers)
-    print "Balcony search http res: {}".format(balcony_search.status_code)
+    search = s.post(search_url, data=search_data, headers=search_headers)
+    search.raise_for_status()
+    logger.debug("Sleeping for 5 seconds before querying for the results")
 
     # The web UI sleeps for a few seconds here, lets mimick that
     # It seemst to work without, but better to mimick more
