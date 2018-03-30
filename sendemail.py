@@ -29,7 +29,7 @@ Link: {link}
 
 html_message_flat = u"""
 <p>
-<a href="{link"}><b>Address</b>: {addr}</a> <br>
+<a href="{link}"><b>Address</b>: {addr}</a> <br>
 <b>Kiez</b>: {kiez} <br>
 
 <b>Cold rent</b>: €{kalt}  <br>
@@ -65,13 +65,13 @@ def get_dogpic():
 def create_html_email_body(flats, dogpic):
     flatmsgs = html_section.join([html_message_flat.format(**a) for a in flats])
     msg = message_greetings.format(len(flats)) + html_section + flatmsgs
-    html = msg + html_dog.format(dog=dogpic)
+    html = msg + html_section + html_dog.format(dog=dogpic)
     return html
 
 def create_email_body(flats, dogpic):
     flatmsgs = section.join([message_flat.format(**a) for a in flats])
     msg = message_greetings.format(len(flats)) + section + flatmsgs
-    plain = msg + dog.format(dog=dogpic)
+    plain = msg + section + dog.format(dog=dogpic)
     return plain
 
 def create_email(flats):
@@ -90,7 +90,7 @@ def create_email(flats):
     return msg
 
 def send_email(flats):
-    logger.info("Sending emails to {}".format(", ".join(config.email_to)))
+    logger.info("Sending email to: {}".format(", ".join(config.email_to)))
     msg = create_email(flats)
 
     try:

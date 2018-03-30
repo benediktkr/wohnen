@@ -27,10 +27,9 @@ def get_dogpics():
     for subreddit in dogreddits:
         d = session.get(urljoin(REDDIT, "/r/{}/.json".format(subreddit)))
         if d.status_code == 200:
-            logger.debug("Got dogpics from /r/{}".format(subreddit))
             dogs.extend(urls(d.json()))
 
-        logging.debug("Sleeping for 3 seconds between hitting reddit")
+        logger.debug("Sleeping for 3 seconds between hitting reddit")
         time.sleep(3.0)
 
     return dogs
