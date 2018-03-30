@@ -79,8 +79,8 @@ def create_email(flats):
 
     msg = MIMEMultipart('alternative')
 
-    plain = MIMEText(create_email_body(flats, dogpic), _charset="utf-8")
-    html = MIMEText(create_html_email_body(flats, dogpic), _charset="utf-8")
+    plain = MIMEText(create_email_body(flats, dogpic), "text", _charset="utf-8")
+    html = MIMEText(create_html_email_body(flats, dogpic), "html", _charset="utf-8")
     msg.attach(plain)
     msg.attach(html)
 
@@ -90,10 +90,10 @@ def create_email(flats):
     return msg
 
 def send_email(flats):
-    logger.info("Sending email to: {}".format(", ".join(config.email_to)))
     msg = create_email(flats)
 
     try:
+        logger.info("Sending email to: {}".format(", ".join(config.email_to)))
         s = smtplib.SMTP(config.smtp_server)
         s.sendmail(config.email_from, config.email_to, msg.as_string())
         s.quit()
