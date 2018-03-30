@@ -64,14 +64,13 @@ def get_dogpic():
 
 def create_html_email_body(flats, dogpic):
     flatmsgs = html_section.join([html_message_flat.format(**a) for a in flats])
-    msg = message_greetings.format(len(flats)) + html_section + flatmsgs
-    html = msg + html_section + html_dog.format(dog=dogpic)
-    return html
+    msg = message_greetings.format(len(flats)) + html_dog.format(dog=dogpic) + flatmsgs
+    return msg
 
 def create_email_body(flats, dogpic):
     flatmsgs = section.join([message_flat.format(**a) for a in flats])
     msg = message_greetings.format(len(flats)) + section + flatmsgs
-    plain = msg + section + dog.format(dog=dogpic)
+    plain = dog.format(dog=dogpic) + section + msg
     return plain
 
 def create_email(flats, emails):
