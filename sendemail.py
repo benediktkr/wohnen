@@ -2,6 +2,7 @@
 
 import smtplib
 from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 import logging
 
 import config
@@ -26,27 +27,63 @@ Size: {sqm} m²
 Link: {link}
 """
 
+html_message_flat = u"""
+<p>
+<a href="{link"}><b>Address</b>: {addr}</a> <br>
+<b>Kiez</b>: {kiez} <br>
+
+<b>Cold rent</b>: €{kalt}  <br>
+<b>Warm rent</b>: €{total}  <br>
+
+<b>Size</b>: {sqm} m²  <br>
+</p>
+"""
+
+
 section = u"""
 ===
 """
 
+html_section = u"""<hr>"""
+
+dog = u"""
+Dog: {dog}
+"""
+
+html_dog = u"""<p><img src="{dog}"></p>"""
+
+
+
 def get_dogpic():
     try:
-        dog = dogpics.get_random_dogpic()
-        html = u"""<p><img src="{}"></p>"""
-        return html.format(dog)
+        return dogpics.get_random_dogpic()
     except Exception as e:
         logging.error(e)
-        return u""
+        return dogpics.DEFAULTDOG
 
-def create_email_body(flats):
+
+def create_html_email_body(flats, dogpic):
+    flatmsgs = html_section.join([html_message_flat.format(**a) for a in flats])
+    msg = message_greetings.format(len(flats)) + html_section + flatmsgs
+    html = msg + html_dog.format(dog=dogpic)
+    return html
+
+def create_email_body(flats, dogpic):
     flatmsgs = section.join([message_flat.format(**a) for a in flats])
     msg = message_greetings.format(len(flats)) + section + flatmsgs
-    return msg
-
+    plain = msg + dog.format(dog=dogpic)
+    return plain
 
 def create_email(flats):
-    msg = MIMEText(create_email_body(flats), _charset="utf-8")
+    dogpic = get_dogpic()
+
+    msg = MIMEMultipart('alternative')
+
+    plain = MIMEText(create_email_body(flats, dogpic), _charset="utf-8")
+    html = MIMEText(create_html_email_body(flats, dogpic), _charset="utf-8")
+    msg.attach(plain)
+    msg.attach(html)
+
     msg['Subject'] = "Found {} new flats".format(len(flats))
     msg["From"] = config.email_from
     msg["To"] = ", ".join(config.email_to)
