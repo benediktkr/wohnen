@@ -2,7 +2,7 @@
 
 import logging
 
-import urlparse
+from urlparse import urljoin
 import urllib
 from lxml import html
 
@@ -50,5 +50,5 @@ def parse(html_input):
             'year': year,
             'addr': addr,
             'kiez': kiez,
-            'link': urllib.quote(urlparse.urljoin(base_url, link), safe=":/"),
+            'link': urllib.quote(urljoin(base_url, link), safe=":/"),
         }

@@ -5,6 +5,7 @@ from email.mime.text import MIMEText
 import logging
 
 import config
+import dogpics
 
 logger = logging.getLogger(__name__)
 
@@ -29,6 +30,14 @@ section = u"""
 ===
 """
 
+def get_dogpic():
+    try:
+        dog = dogpics.get_random_dogpic()
+        html = u"""<p><img src="{}"></p>"""
+        return html.format(dog)
+    except Exception as e:
+        logging.error(e)
+        return u""
 
 def create_email_body(flats):
     flatmsgs = section.join([message_flat.format(**a) for a in flats])
