@@ -80,7 +80,6 @@ def scrape():
 
     # The web UI sleeps for a few seconds here, lets mimick that
     # It seemst to work without, but better to mimick more
-    print "Sleeping for 5 seconds..."
     time.sleep(5.0)
 
     html_result = s.get(result_url, headers=result_headers)

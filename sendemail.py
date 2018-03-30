@@ -93,7 +93,7 @@ def send_email(flats, emails):
     msg = create_email(flats, emails)
 
     try:
-        logger.info("Sending email to: {}".format(", ".join(config.email_to)))
+        logger.info("Sending email to: {}".format(", ".join(emails)))
         s = smtplib.SMTP(config.smtp_server)
         s.sendmail(config.email_from, emails, msg.as_string())
         s.quit()
