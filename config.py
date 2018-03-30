@@ -1,6 +1,6 @@
-from logging import DEBUG, INFO, ERROR
+from logging import DEBUG, INFO, WARNING, ERROR
 
-jsonfile = "wohnen-test.json"
+jsonfile = "/home/benedikt/wohnen.json"
 loglevel = DEBUG
 
 

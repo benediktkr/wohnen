@@ -32,17 +32,25 @@ def get_dogpics():
         logger.debug("Sleeping for 3 seconds between hitting reddit")
         time.sleep(3.0)
 
+    logging.info("Found {} dogs".format(len(dogs)))
     return dogs
 
 def get_random_dogpic():
     try:
         dogs = get_dogpics()
-        return random.choice(dogs)
-    except IndexError:
+        rnddog = random.choice(dogs)
+        logging.info("Picked {}".format(rnddog))
+        return rnddog
+    except IndexError as e:
         # get_dogpics() returned an empty list
+        logging.error(e)
+        logging.info("Picking default dog")
         return DEFAULTDOG
-    except requests.exceptions.RequestException:
+    except requests.exceptions.RequestException as e:
+        logging.error(e)
+        logging.info("Picking default dog")
         return DEFAULTDOG
 
 if __name__ == "__main__":
+    print "Default:", DEFAULTDOG
     print get_random_dogpic()
