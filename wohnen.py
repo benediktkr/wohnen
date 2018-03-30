@@ -25,6 +25,7 @@ ch.setFormatter(formatter)
 logger.addHandler(ch)
 
 def get_sample(site):
+    logger.warning("Using sample file for {}".format(site))
     with open('{}/sample.txt'.format(site), 'r') as f:
         ## html will be a list
         return f.read()
