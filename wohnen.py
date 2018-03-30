@@ -11,7 +11,7 @@ import config
 parser = argparse.ArgumentParser()
 parser.add_argument("sites", type=str, nargs='+', help="list of sites to check")
 parser.add_argument("--scrape", action="store_true", help="actually scrape")
-parser.add_argument("--email", action="store_true", help="send email notification")
+parser.add_argument("--email", type=str, nargs="+", help="email addresses to send notify about new flats")
 
 args = parser.parse_args()
 
@@ -54,4 +54,4 @@ if __name__ == "__main__":
         jsonfile.save()
 
         if args.email and len(newflats) > 0:
-            sendemail.send_email(newflats)
+            sendemail.send_email(newflats, args.email)
