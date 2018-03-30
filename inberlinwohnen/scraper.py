@@ -58,7 +58,7 @@ search_data = {
     'qheizung_solar': '0',
     'qheizung_erdwaerme': '0',
     'qheizung_fussboden': '0',
-    'qbalkon_loggia_terrasse': '1',
+    'qbalkon_loggia_terrasse': '0',  # was 1 in my capture. verified manually that this will return flats with and without balcony
     'qgarten': '0',
     'qwbs': 'must_not',
     'qbarrierefrei': '0',
@@ -81,4 +81,5 @@ def scrape():
     time.sleep(5.0)
 
     html_result = s.get(result_url, headers=result_headers)
+
     return html_result.text.encode("utf-8")
