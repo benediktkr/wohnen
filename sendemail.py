@@ -74,7 +74,7 @@ def create_email_body(flats, dogpic):
     plain = msg + section + dog.format(dog=dogpic)
     return plain
 
-def create_email(flats):
+def create_email(flats, emails):
     dogpic = get_dogpic()
 
     msg = MIMEMultipart('alternative')
@@ -86,16 +86,16 @@ def create_email(flats):
 
     msg['Subject'] = "Found {} new flats".format(len(flats))
     msg["From"] = config.email_from
-    msg["To"] = ", ".join(config.email_to)
+    msg["To"] = ", ".join(emails)
     return msg
 
-def send_email(flats):
-    msg = create_email(flats)
+def send_email(flats, emails):
+    msg = create_email(flats, emails)
 
     try:
         logger.info("Sending email to: {}".format(", ".join(config.email_to)))
         s = smtplib.SMTP(config.smtp_server)
-        s.sendmail(config.email_from, config.email_to, msg.as_string())
+        s.sendmail(config.email_from, emails, msg.as_string())
         s.quit()
     except Exception as e:
         logger.error(e)
