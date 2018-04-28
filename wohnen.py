@@ -36,7 +36,7 @@ if __name__ == "__main__":
         sitem = getattr(sys.modules[__name__], site)
         if args.scrape:
             scraper = getattr(sitem, "scraper")
-            html = scraper.scrape()
+            html = scraper.scrape(config.min_rooms, config.max_rooms, config.max_rent, config.wbs)
         else:
             scraper = None
             html = get_sample(site)
