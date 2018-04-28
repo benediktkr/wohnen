@@ -73,8 +73,22 @@ search_data = {
     'qdusche': '0',
 }
 
-def scrape():
-    search = s.post(search_url, data=search_data, headers=search_headers)
+def get_search(min_rooms, max_rooms, max_rent, wbs):
+    wbs_map = {
+        0: 'must_not',
+        1: 'must',
+        2: 'all',
+    }
+    s = search_data.copy()
+    s['qrooms_min'] = str(min_rooms)
+    s['qrooms_max'] = str(max_rooms)
+    s['qmiete_max'] = str(max_rent)
+    s['qwbs'] = wbs_map[wbs]
+    return s
+
+def scrape(min_rooms, max_rooms, max_rent, wbs):
+    search_d = get_search(min_rooms, max_rooms, max_rent, wbs)
+    search = s.post(search_url, data=search_d, headers=search_headers)
     search.raise_for_status()
     logger.debug("Sleeping for 5 seconds before querying for the results")
 
