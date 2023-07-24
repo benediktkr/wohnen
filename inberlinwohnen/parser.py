@@ -2,6 +2,8 @@ import logging
 
 from bs4 import BeautifulSoup
 
+from apartment import Apartment
+
 logger = logging.getLogger(__name__)
 
 
@@ -12,12 +14,23 @@ def parse(html):
     apartment_list = soup.find('ul', {'class': 'remember-list'})
     if apartment_list:
         for apartment_item in apartment_list.find_all('li', {'class': 'tb-merkflat ipg'}):
-            apartment_data = {}
+            # init with question mark
+            apartment_data: Apartment = {'addr': '?', 'floor': '?', 'price': '?', 'rooms': '?', 'sqm': '?',
+                                         'timeframe': '?', 'wbs': '?', 'year': '?', 'link': '?', 'image': '?'}
 
             # extract price from title
             title = apartment_item.find('h3').text.strip()
             kaltmiete_str = title.split('|')[0].split(', ')[2]
-            apartment_data['kaltmiete'] = float(kaltmiete_str.split()[0].replace(',', '.'))
+            apartment_data['price'] = float(kaltmiete_str.split()[0].replace(',', '.'))
+
+            details_link = apartment_item.find('a', {'class': 'org-but'})
+            if details_link:
+                apartment_data['link'] = 'https://inberlinwohnen.de' + details_link['href']
+
+            image_container = apartment_item.find('figure', {'class': 'flat-image wide'})
+            if image_container:
+                image_link = image_container['style'].split("(")[1].split(")")[0]
+                apartment_data['image'] = image_link
 
             details_tables = apartment_item.findAll('table', {'class': 'tb-small-data'})
             for details_table in details_tables:
