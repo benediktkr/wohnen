@@ -1,21 +1,15 @@
 from logging import DEBUG, INFO, WARNING, ERROR
 
-jsonfile = "/home/benedikt/wohnen.json"
+jsonfile = "./wohnen.json"
 loglevel = DEBUG
-
-
-email_from = "benedikt@sudo.is"
-
-smtp_server = "localhost"
-
 
 ## Set searches
 ## This only has an effect when run with --scrape
-min_rooms = 2
-max_rooms = 4
-max_rent = 1000
+min_rooms = 1
+max_rooms = 2
+max_rent = 600
 # 0 = No wbs
 # 1 = only wbs
 # 2 = doesnt matter
-wbs = 0
+wbs = 2
 

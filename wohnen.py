@@ -1,11 +1,11 @@
-import sys
 import argparse
+import json
 import logging
+import sys
 
 import inberlinwohnen.parser
 import inberlinwohnen.scraper
-from jsonfile import JsonFile
-import sendemail
+
 import config
 
 parser = argparse.ArgumentParser()
@@ -24,11 +24,13 @@ formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(name)s - %(messag
 ch.setFormatter(formatter)
 logger.addHandler(ch)
 
+
 def get_sample(site):
     logger.warning("Using sample file for {}".format(site))
     with open('{}/sample.txt'.format(site), 'r') as f:
         ## html will be a list
         return f.read()
+
 
 if __name__ == "__main__":
     for site in args.sites:
@@ -42,17 +44,12 @@ if __name__ == "__main__":
             html = get_sample(site)
 
         parser = getattr(sitem, "parser")
-        flats = parser.parse(html)
+        aparts = parser.parse(html)
 
-        jsonfile = JsonFile.open(config.jsonfile)
-        jsonfile.add_list(flats)
+        with open(config.jsonfile, 'r') as infile:
+            known_aparts = json.load(infile)
 
-        newflats = jsonfile.new_items[:]
+        new_aparts = [x for x in aparts if x not in known_aparts]
 
-        if jsonfile.new_item_count > 0:
-            logging.info("Found {} new flats".format(jsonfile.new_item_count))
-
-        jsonfile.save()
-
-        if args.email and len(newflats) > 0:
-            sendemail.send_email(newflats, args.email)
+        with open(config.jsonfile, 'w') as outfile:
+            json.dump(aparts, outfile)
